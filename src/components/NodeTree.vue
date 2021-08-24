@@ -47,7 +47,7 @@ export default {
     return {
       checked: true,
       childrenCounts: [],
-      baseURL: 'https://www.klerk.ru'
+      baseURL: 'https://www.example.ru'
     }
   },
 
@@ -70,9 +70,10 @@ export default {
   },
 
   methods: {
-    emitter(double = false) {
-      if (!double) {
+    emitter(isMounted = true) {
+      if (isMounted) {
         !this.isTopBranch && this.$emit('upSelfCount', this.itemChildrenCounts, this.index)
+        this.isTopBranch && !this.node.children.length && this.$emit('upSums', this.itemChildrenCounts, this.topBranchIndex)
       } else {
         !this.isTopBranch && this.$emit('upSelfCount', this.itemChildrenCounts, this.index)
         this.isTopBranch && this.$emit('upSums', this.itemChildrenCounts, this.topBranchIndex)
@@ -80,7 +81,7 @@ export default {
     },
 
     onChange() {
-      this.emitter(true)
+      this.emitter(false)
     },
 
     collectCount(count, index) {
@@ -90,7 +91,6 @@ export default {
 
   mounted() {
     this.emitter()
-    this.isTopBranch && !this.node.children.length && this.$emit('upSums', this.itemChildrenCounts, this.topBranchIndex)
   },
 
   watch: {
